@@ -1,0 +1,11 @@
+{% extends "basic.html" %}
+{% block content %}
+
+    <div class="mx-auto" style="width: 200px; padding-top: 22%">
+        <p class="text-center">{{ result }}</p>
+        <div class=".col-xs-9 text-center" style="padding-top: 100%;">
+            <p class="text-center">want to try more?</p>
+            <a href="{{ url_for('index') }}"><input type="button" class="btn btn-default" value="YES"></a>
+        </div>
+    </div>
+{% endblock %}

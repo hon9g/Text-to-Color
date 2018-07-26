@@ -1,0 +1,18 @@
+{% extends "basic.html" %}
+{% block content %}
+
+    <div  class="mx-auto" style="width: 250px; padding-top: 20%;">
+        <h2 style="padding-right: 17px;" class="text-center">How are you?</h2>
+        <p class="text-center">
+            <form action="/predict" method="POST">
+                <div class="col-sm-9 center-block" style="text-align:center;">
+                    <input style="width: 200px;" type="text" class="form-control" name="text" placeholder='more than one word'>
+
+                </div>
+                <div class="center-block hong" style="padding-top: 15px">
+                    <input class="btn btn-default center-block" style="width: 90px;" type="submit" value="to Color">
+                </div>
+            </form>
+        </p>
+    </div>
+{% endblock %}

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<header>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
+{#    <link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet">#}
+{#    <script src="{{ url_for('static', filename='js/main.js') }}" type="text/javascript"></script>#}
+    <link href="/static/css/main.css" rel="stylesheet">
+    <script src="/static/js/main.js" type="text/javascript"></script>
+</header>
+
+<body>
+<style>
+    @import url('https://fonts.googleapis.com/css?family=Roboto:300i,400,700');
+    #bg1 {
+        background: {{ color1 }};
+    }
+    #bg2 {
+        background: linear-gradient(to bottom, {{ color2 }});
+    }
+    #bg3 {
+        background: linear-gradient(to bottom, {{ color3 }});
+    }
+
+#bg1 {
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    pointer-events: none;;
+    z-index: -1;
+    top: 0;
+}
+#bg2 {
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    pointer-events: none;
+    z-index: -1;
+    top: 0;
+}
+#bg3 {
+    width: 100vw;
+    height: 50vh;
+    position: absolute;
+    pointer-events: none;
+    z-index: -1;
+    top: 0;
+}
+
+.hong {
+    padding-left: 71px;
+}
+</style>
+<div id="bg1"></div>
+<div id="bg2"></div>
+<div id="bg3"></div>
+{% block content %}{% endblock %}
+</body>
+</html>
