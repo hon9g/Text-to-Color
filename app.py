@@ -87,9 +87,6 @@ def model_predict(TEST_SENTENCES):
     # print('Tokenizing using dictionary from {}'.format(VOCAB_PATH))
     tokenized, _, _ = st.tokenize_sentences(TEST_SENTENCES)
     print (tokenized)
-    # pdb.set_trace()
-    # prob = model.predict(tokenized)
-    # pdb.set_trace()
     prob = model.predict_function([tokenized])[0]
     return prob
 
@@ -105,12 +102,7 @@ def get_emoji(TEST_SENTENCES):
     t_score = []
     print (TEST_SENTENCES)
     prob = model_predict(TEST_SENTENCES)
-    # K.clear_session()
-    # t = TEST_SENTENCES[0]
-    # i = 0
-    # for i, t in enumerate(TEST_SENTENCES):
     t_score.append(TEST_SENTENCES[0])
-    # t_prob = prob[i]
     t_prob = prob[0]
     ind_top = top_elements(t_prob, 3)
     t_score.append(sum(t_prob[ind_top]))
@@ -136,10 +128,6 @@ def upload():
         length = len(temp[0].split())
         if length > 1:
             result = get_emoji(temp)
-            # result = ['i am so hungry i could die', 0.32384027540683746, 29, 52, 2, 0.12622266, 0.11112564, 0.08649198]
-            # print(result)
-            # value = str(result[0])
-            # confidency = str(result[1])
             norm = float(result[5]) + float(result[6]) + float(result[7])
             inx1 = int(result[2])
             inx2 = int(result[3])
@@ -157,8 +145,8 @@ def upload():
 
 
 if __name__ == '__main__':
-    # app.run(host='0.0.0.0', port=5000, debug=True)
-    # app.run(port=5002, debug=True)
-    # Serve the app with gevent
-    http_server = WSGIServer(('', 5000), app)
-    http_server.serve_forever()
+    app.run(host='0.0.0.0', port=5000, debug=True)
+
+    # When ran it on GCP
+    # http_server = WSGIServer(('', 4999), app)
+    # http_server.serve_forever()
