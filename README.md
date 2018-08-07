@@ -11,7 +11,7 @@ This was supported by [Deep Learning Camp Jeju 2018](http://jeju.dlcamp.org/2018
 
 I ran this webpage on Google Cloud Platform during the final presentation of Jeju DL Camp 2018. [[presentation slide](https://docs.google.com/presentation/d/1KhDNmQDuvWiQ2-A3REiayisGM00CDjCrDB54-qLaIUw/edit?usp=sharing/)]
 and let audience access to demo webpage with their device(laptop, smartphone.. etc).
-
+Now, I've shut down the website. However, you can still run it locally with this code and access to demo webpage.
 
 
 
