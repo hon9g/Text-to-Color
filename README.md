@@ -2,8 +2,9 @@
 This was supported by [Deep Learning Camp Jeju 2018](http://jeju.dlcamp.org/2018/) which was organized by [TensorFlow Korea User Group](https://facebook.com/groups/TensorFlowKR/).
 
 
-    I want to make the conversation interface which recognizes user's emotion and displays it in colors.
-    This is the code about a demo webpage that briefly covered this concept. 
+    This is a text-to-color demo code.
+    To obtain more face-to-face information on the conversational interface,
+    It designed as recognizing user's emotion from texts and displaying it in colors. 
 
 
 
