@@ -128,15 +128,13 @@ def upload():
         length = len(temp[0].split())
         if length > 1:
             result = get_emoji(temp)
-            norm = float(result[5]) + float(result[6]) + float(result[7])
             inx1 = int(result[2])
             inx2 = int(result[3])
             inx3 = int(result[4])
             value = emo[inx1]+emo[inx2]+emo[inx3]+'\n'+str(result[0])
-            color1 = "rgba(" + emoToColor[inx1] + ', ' + str(float(result[5]) / norm) + ")"
-            color2 = "rgba(" + emoToColor[inx2] + ', ' + str(float(result[6]) / norm) + "), rgba(" + emoToColor[inx2] + ",  0.0)"
-            color3 = "rgba(" + emoToColor[inx3] + ', ' + str(float(result[7]) / norm) + "), rgba(" + emoToColor[inx3] + ",  0.0)"
-            print (color1, color2, color3)
+            color1 = "rgba(" + emoToColor[inx1] + ', ' + str(float(result[5])+0.1) + ")"
+            color2 = "rgba(" + emoToColor[inx2] + ', ' + str(float(result[6])+0.1) + "), rgba(" + emoToColor[inx2] + ",  0.0)"
+            color3 = "rgba(" + emoToColor[inx3] + ', ' + str(float(result[7])+0.1) + "), rgba(" + emoToColor[inx3] + ",  0.0)"
             return render_template('predict.html', result=value, color1=color1, color2=color2, color3=color3)
         else:
             return render_template('index.html')
