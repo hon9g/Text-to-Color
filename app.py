@@ -144,7 +144,7 @@ def upload():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run()
 
     # When ran it on GCP
     # http_server = WSGIServer(('', 4999), app)
