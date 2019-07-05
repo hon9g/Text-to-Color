@@ -1,7 +1,6 @@
 
 from __future__ import print_function, division
 import sys
-import numpy as np
 import re
 import string
 import emoji
@@ -45,68 +44,8 @@ def is_special_token(word):
     return equal
 
 
-def mostly_english(words, english, pct_eng_short=0.5, pct_eng_long=0.6, ignore_special_tokens=True, min_length=2):
-    """ Ensure text meets threshold for containing English words """
-
-    n_words = 0
-    n_english = 0
-
-    if english is None:
-        return True, 0, 0
-
-    for w in words:
-        if len(w) < min_length:
-            continue
-        if punct_word(w):
-            continue
-        if ignore_special_tokens and is_special_token(w):
-            continue
-        n_words += 1
-        if w in english:
-            n_english += 1
-
-    if n_words < 2:
-        return True, n_words, n_english
-    if n_words < 5:
-        valid_english = n_english >= n_words * pct_eng_short
-    else:
-        valid_english = n_english >= n_words * pct_eng_long
-    return valid_english, n_words, n_english
-
-
-def correct_length(words, min_words, max_words, ignore_special_tokens=True):
-    """ Ensure text meets threshold for containing English words
-        and that it's within the min and max words limits. """
-
-    if min_words is None:
-        min_words = 0
-
-    if max_words is None:
-        max_words = 99999
-
-    n_words = 0
-    for w in words:
-        if punct_word(w):
-            continue
-        if ignore_special_tokens and is_special_token(w):
-            continue
-        n_words += 1
-    valid = min_words <= n_words and n_words <= max_words
-    return valid
-
-
 def punct_word(word, punctuation=string.punctuation):
     return all([True if c in punctuation else False for c in word])
-
-
-def load_non_english_user_set():
-    non_english_user_set = set(np.load('uids.npz')['data'])
-    return non_english_user_set
-
-
-def non_english_user(userid, non_english_user_set):
-    neu_found = int(userid) in non_english_user_set
-    return neu_found
 
 
 def separate_emojis_and_text(text):
@@ -118,11 +57,6 @@ def separate_emojis_and_text(text):
         else:
             non_emoji_chars.append(c)
     return ''.join(emoji_chars), ''.join(non_emoji_chars)
-
-
-def extract_emojis(text, wanted_emojis):
-    text = remove_variation_selectors(text)
-    return [c for c in text if c in wanted_emojis]
 
 
 def remove_variation_selectors(text):
@@ -180,17 +114,6 @@ def process_word(word):
     word = shorten_word(word)
     word = detect_special_tokens(word)
     return word
-
-
-def remove_control_chars(text):
-    return CONTROL_CHAR_REGEX.sub('', text)
-
-
-def convert_nonbreaking_space(text):
-    # ugly hack handling non-breaking space no matter how badly it's been encoded in the input
-    for r in [u'\\\\xc2', u'\\xc2', u'\xc2', u'\\\\xa0', u'\\xa0', u'\xa0']:
-        text = text.replace(r, u' ')
-    return text
 
 
 def convert_linebreaks(text):

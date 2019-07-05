@@ -8,19 +8,12 @@ from __future__ import division, print_function
 
 import re
 import unicodedata
-import numpy as np
 from text_unidecode import unidecode
 from deepmoji.tokenizer import RE_MENTION, tokenize
 from deepmoji.filter_utils import (
     convert_linebreaks,
-    convert_nonbreaking_space,
-    correct_length,
-    extract_emojis,
-    mostly_english,
-    non_english_user,
     process_word,
     punct_word,
-    remove_control_chars,
     remove_variation_selectors,
     separate_emojis_and_text)
 
@@ -76,7 +69,7 @@ class WordGenerator():
 
         # Split into words using simple whitespace splitting and convert
         # Unicode. This is done to prevent word splitting issues with
-        # twokenize and Unicode
+        # tokenize and Unicode
         words = sentence.split()
         converted_words = []
         for w in words:
@@ -231,78 +224,3 @@ class WordGenerator():
 
             self.stats['total'] += 1
 
-
-class TweetWordGenerator(WordGenerator):
-    ''' Returns np array or generator of ASCII sentences for given tweet input.
-        Any file opening/closing should be handled outside of this class.
-    '''
-
-    def __init__(self, stream, wanted_emojis=None, english_words=None,
-                 non_english_user_set=None, allow_unicode_text=False,
-                 ignore_retweets=True, ignore_url_tweets=True,
-                 ignore_mention_tweets=False):
-
-        self.wanted_emojis = wanted_emojis
-        self.english_words = english_words
-        self.non_english_user_set = non_english_user_set
-        self.ignore_retweets = ignore_retweets
-        self.ignore_url_tweets = ignore_url_tweets
-        self.ignore_mention_tweets = ignore_mention_tweets
-        WordGenerator.__init__(self, stream,
-                               allow_unicode_text=allow_unicode_text)
-
-    def validated_tweet(self, data):
-        ''' A bunch of checks to determine whether the tweet is valid.
-            Also returns emojis contained by the tweet.
-        '''
-
-        # Ordering of validations is important for speed
-        # If it passes all checks, then the tweet is validated for usage
-
-        # Skips incomplete tweets
-        if len(data) <= 9:
-            return False, []
-
-        text = data[9]
-
-        if self.ignore_retweets and RETWEETS_RE.search(text):
-            return False, []
-
-        if self.ignore_url_tweets and URLS_RE.search(text):
-            return False, []
-
-        if self.ignore_mention_tweets and MENTION_RE.search(text):
-            return False, []
-
-        if self.wanted_emojis is not None:
-            uniq_emojis = np.unique(extract_emojis(text, self.wanted_emojis))
-            if len(uniq_emojis) == 0:
-                return False, []
-        else:
-            uniq_emojis = []
-
-        if self.non_english_user_set is not None and \
-           non_english_user(data[1], self.non_english_user_set):
-            return False, []
-        return True, uniq_emojis
-
-    def data_preprocess_filtering(self, line, iter_i):
-        fields = line.strip().split("\t")
-        valid, emojis = self.validated_tweet(fields)
-        text = fields[9].replace(u'\\n', u'') \
-                        .replace(u'\\r', u'') \
-                        .replace(u'&amp', u'&') if valid else ''
-        return valid, text, {'emojis': emojis}
-
-    def data_postprocess_filtering(self, words, iter_i):
-        valid_length = correct_length(words, 1, None)
-        valid_english, n_words, n_english = mostly_english(words,
-                                                           self.english_words)
-        if valid_length and valid_english:
-            return True, words, {'length': len(words),
-                                 'n_normal_words': n_words,
-                                 'n_english': n_english}
-        else:
-            return False, [], {'length': len(words),
-                               'n_normal_words': n_words,
-                               'n_english': n_english}

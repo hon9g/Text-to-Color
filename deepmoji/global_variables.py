@@ -19,9 +19,5 @@ ROOT_PATH = dirname(dirname(abspath(__file__)))
 VOCAB_PATH = '{}/models/vocabulary.json'.format(ROOT_PATH)
 PRETRAINED_PATH = '{}/models/deepmoji_weights.hdf5'.format(ROOT_PATH)
 
-WEIGHTS_DIR = tempfile.mkdtemp()
-
 NB_TOKENS = 50000
 NB_EMOJI_CLASSES = 64
-FINETUNING_METHODS = ['last', 'full', 'new', 'chain-thaw']
-FINETUNING_METRICS = ['acc', 'weighted']

@@ -4,12 +4,9 @@ numbers, according to the given vocabulary.
 '''
 from __future__ import print_function, division
 
-import numbers
 import numpy as np
-from deepmoji.create_vocab import extend_vocab, VocabBuilder
 from deepmoji.word_generator import WordGenerator
 from deepmoji.global_variables import SPECIAL_TOKENS
-from sklearn.model_selection import train_test_split
 from copy import deepcopy
 
 
@@ -128,111 +125,3 @@ class SentenceTokenizer():
             except KeyError:
                 tokens.append(self.unknown_value)
         return tokens
-
-    def split_train_val_test(self, sentences, info_dicts,
-                             split_parameter=[0.7, 0.1, 0.2], extend_with=0):
-        """ Splits given sentences into three different datasets: training,
-            validation and testing.
-
-        # Arguments:
-            sentences: The sentences to be tokenized.
-            info_dicts: A list of dicts that contain information about each
-                sentence (e.g. a label).
-            split_parameter: A parameter for deciding the splits between the
-                three different datasets. If instead of being passed three
-                values, three lists are passed, then these will be used to
-                specify which observation belong to which dataset.
-            extend_with: An optional parameter. If > 0 then this is the number
-                of tokens added to the vocabulary from this dataset. The
-                expanded vocab will be generated using only the training set,
-                but is applied to all three sets.
-
-        # Returns:
-            List of three lists of tokenized sentences,
-
-            List of three corresponding dictionaries with information,
-
-            How many tokens have been added to the vocab. Make sure to extend
-            the embedding layer of the model accordingly.
-        """
-
-        # If passed three lists, use those directly
-        if isinstance(split_parameter, list) and \
-                all(isinstance(x, list) for x in split_parameter) and \
-                len(split_parameter) == 3:
-
-            # Helper function to verify provided indices are numbers in range
-            def verify_indices(inds):
-                return list(filter(lambda i: isinstance(i, numbers.Number) and
-                                   i < len(sentences), inds))
-
-            ind_train = verify_indices(split_parameter[0])
-            ind_val = verify_indices(split_parameter[1])
-            ind_test = verify_indices(split_parameter[2])
-        else:
-            # Split sentences and dicts
-            ind = list(range(len(sentences)))
-            ind_train, ind_test = train_test_split(ind, test_size=split_parameter[2])
-            ind_train, ind_val = train_test_split(ind_train, test_size=split_parameter[1])
-
-        # Map indices to data
-        train = np.array([sentences[x] for x in ind_train])
-        test = np.array([sentences[x] for x in ind_test])
-        val = np.array([sentences[x] for x in ind_val])
-
-        info_train = np.array([info_dicts[x] for x in ind_train])
-        info_test = np.array([info_dicts[x] for x in ind_test])
-        info_val = np.array([info_dicts[x] for x in ind_val])
-
-        added = 0
-        # Extend vocabulary with training set tokens
-        if extend_with > 0:
-            wg = WordGenerator(train)
-            vb = VocabBuilder(wg)
-            vb.count_all_words()
-            added = extend_vocab(self.vocabulary, vb, max_tokens=extend_with)
-
-        # Wrap results
-        result = [self.tokenize_sentences(s)[0] for s in [train, val, test]]
-        result_infos = [info_train, info_val, info_test]
-
-        return result, result_infos, added
-
-    def to_sentence(self, sentence_idx):
-        """ Converts a tokenized sentence back to a list of words.
-
-        # Arguments:
-            sentence_idx: List of numbers, representing a tokenized sentence
-                given the current vocabulary.
-
-        # Returns:
-            String created by converting all numbers back to words and joined
-            together with spaces.
-        """
-        # Have to recalculate the mappings in case the vocab was extended.
-        ind_to_word = {ind: word for word, ind in self.vocabulary.iteritems()}
-
-        sentence_as_list = [ind_to_word[x] for x in sentence_idx]
-        cleaned_list = [x for x in sentence_as_list if x != 'CUSTOM_MASK']
-        return " ".join(cleaned_list)
-
-
-def coverage(dataset, verbose=False):
-    """ Computes the percentage of words in a given dataset that are unknown.
-
-    # Arguments:
-        dataset: Tokenized dataset to be checked.
-        verbose: Verbosity flag.
-
-    # Returns:
-        Percentage of unknown tokens.
-    """
-    n_total = np.count_nonzero(dataset)
-    n_unknown = np.sum(dataset == 1)
-    coverage = 1.0 - float(n_unknown) / n_total
-
-    if verbose:
-        print("Unknown words: {}".format(n_unknown))
-        print("Total words: {}".format(n_total))
-        print("Coverage: {}".format(coverage))
-    return coverage
