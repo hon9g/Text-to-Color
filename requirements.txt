@@ -9,6 +9,7 @@ gevent==1.4.0
 google-pasta==0.1.7
 greenlet==0.4.15
 grpcio==1.23.0
+gunicorn==19.9.0
 h5py==2.10.0
 itsdangerous==1.1.0
 Jinja2==2.10.1
