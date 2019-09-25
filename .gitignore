@@ -4,3 +4,7 @@ __pycache__/
 
 # Environments
 venv/
+
+# Do not ignore building source
+!requirements.txt
+!runtime.txt
