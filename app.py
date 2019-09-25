@@ -144,8 +144,9 @@ def upload():
 
 
 if __name__ == '__main__':
-    app.run()
+    # development server
+    # app.run()
 
-    # When ran it on GCP
-    # http_server = WSGIServer(('', 4999), app)
-    # http_server.serve_forever()
+    # a production WSGI server.
+    http_server = WSGIServer(('', 4999), app)
+    http_server.serve_forever()
