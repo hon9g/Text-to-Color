@@ -8,7 +8,7 @@ This was supported by [Deep Learning Camp Jeju 2018](http://jeju.dlcamp.org/2018
 
 
 
-<img src="https://github.com/minh364/jejuDLcamp_emotion/blob/master/docs/image/1.gif"/>
+<img src="https://github.com/hon9g/Text-to-Color/blob/main/docs/image/1.gif"/>
 
 - I ran this webpage on Google Cloud Platform during the final presentation of Jeju DL Camp 2018. I used this [presentation slide](https://docs.google.com/presentation/d/1KhDNmQDuvWiQ2-A3REiayisGM00CDjCrDB54-qLaIUw/edit?usp=sharing/).
 - Now I run [webpage on heroku](https://text-to-color.herokuapp.com/).
@@ -50,7 +50,7 @@ I ran this code on
 4. put the sentence and test it.
 
 ## How it works
-<img src="https://github.com/minh364/jejuDLcamp_emotion/blob/master/docs/image/2.png" width="600" />
+<img src="https://github.com/hon9g/Text-to-Color/blob/main/docs/image/2.png" width="600" />
 The text is classified into emojis(I use it as emotional labels) and emojis are mapped to colors.
 
 ### Text to Emoji
@@ -58,7 +58,7 @@ The text is classified into emojis(I use it as emotional labels) and emojis are 
 I use the DeepMoji model from MIT media lab as emotion classifier.<br/>
 It is trained by 1246 million tweets, which is containing one of 64 different common emoticon.<br/>
 
-<img src="https://github.com/minh364/jejuDLcamp_emotion/blob/master/docs/image/3.png" width="500" />
+<img src="https://github.com/hon9g/Text-to-Color/blob/main/docs/image/3.png" width="500" />
 
 There are embedding layer to project each word into a vector space. <br/>
 ( a hyper tangent activation enforce a constraint of each embedding dimension being within -1~1. )<br/>
@@ -70,17 +70,17 @@ And an attention layer that lets the model decide the importance of each word fo
 
 The color code I use is **rgba**. (a = defines the opacity.)<br/>
 
-<img src="https://github.com/minh364/jejuDLcamp_emotion/blob/master/docs/image/4.png"/>
+<img src="https://github.com/hon9g/Text-to-Color/blob/main/docs/image/4.png"/>
 
 I mapping color(rgb) based on dendrogram, which shows how the model learns to group emojis based on emotional content.<br/> 
 The **y-axis is the distance on the correlation matrix** of the model’s predictions. It measured using average linkage.<br/>
 
 
-<img src="https://github.com/minh364/jejuDLcamp_emotion/blob/master/docs/image/array.png" />
+<img src="https://github.com/hon9g/Text-to-Color/blob/main/docs/image/array.png" />
 The output from the model is the probability of each 64 different emojis.<br/>
 I use top 3 probability with normalization for define the opacity of the layers.<br/>
 And these 3 layers are overlapped, and then determine the color of the screen.<br/>
-<img src="https://github.com/minh364/jejuDLcamp_emotion/blob/master/docs/image/5.png" width="500" />
+<img src="https://github.com/hon9g/Text-to-Color/blob/main/docs/image/5.png" width="500" />
 
 ## Citation
 ```
