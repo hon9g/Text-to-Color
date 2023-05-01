@@ -3,7 +3,7 @@ astor==0.8.0
 cffi==1.12.3
 Click==7.0
 emoji==0.5.4
-Flask==1.1.1
+Flask==2.3.2
 gast==0.3.2
 gevent==1.4.0
 google-pasta==0.1.7
